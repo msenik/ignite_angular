@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+    <title>Lesson 13. Homework 3</title>
+    <meta charset="utf-8">
+    <link href="../../libraries/bootstrap.css" rel="stylesheet" />
+    <link href="../../libraries/bootstrap-theme.css" rel="stylesheet" />
+    <script src="../../libraries/angular.js"></script>
+    <style>
+body{
+  padding: 20px 0;
+}
+
+form .ng-valid.ng-dirty {
+  background-color: lightgreen;
+}
+form .ng-invalid.ng-dirty {
+  background-color: lightcoral;
+}
+.error {
+  color: red;
+  font-weight: bold;
+}
+    </style>
+    <script>
+/*
+Создайте форму для регистрации нового пользователя. Форма должна содержать поля:
+ФИО, email, телефон, пароль, подтверждение пароля.
+Реализуйте real-time валидацию пользовательского ввода.
+*/
+
+var module = angular.module("myApp", []);
+
+module.controller("myAppCtrl", function ($scope) {
+
+  $scope.showError = function (elem) {
+      var name = elem.$name;
+      var err = elem.$error;
+      if (angular.isDefined(err)) {
+          if (err.required) {
+              return "Поле обов'язкове для заповнення."
+          }
+          else if (err.email) {
+              return "Неправильно введений email.";
+          }
+          else if (err.pattern && name == 'userPhone') {
+              return 'Телефон повинен мати формат "+380961112233".';
+          }
+          else if (err.pattern && name == "userPasswordRepeat") {
+              return "Пароль повинен співпадати з попереднім.";
+          }
+      }
+  }
+
+  $scope.submitHandler = function(){
+    alert('Дані успішно збережені.');
+  }
+
+});
+
+    </script>
+</head>
+
+<body ng-controller="myAppCtrl">
+  <div class="container">
+    <form role="form" novalidate name="regForm" ng-submit="submitHandler()">
+
+      <div class="form-group">
+        <label for="allName">ПІБ</label>
+        <input type="text" class="form-control" name="userName" ng-model="newUser.name" required>
+        <p class="error" ng-show="regForm.userName.$invalid && regForm.userName.$dirty">
+          {{showError(regForm.userName)}}
+        </p>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Імейл</label>
+        <input type="email" class="form-control" name="userEmail" ng-model="newUser.email" required>
+        <p class="error" ng-show="regForm.userEmail.$invalid && regForm.userEmail.$dirty">
+          {{showError(regForm.userEmail)}}
+        </p>
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Телефон</label>
+        <input type="tel" class="form-control" name="userPhone" pattern="\+[0-9]{12}" ng-model="newUser.phone" required>
+        <p class="error" ng-show="regForm.userPhone.$invalid && regForm.userPhone.$dirty">
+          {{showError(regForm.userPhone)}}
+        </p>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Пароль</label>
+        <input type="password" class="form-control" name="userPassword" ng-model="newUser.password" required>
+        <p class="error" ng-show="regForm.userPassword.$invalid && regForm.userPassword.$dirty">
+          {{showError(regForm.userPassword)}}
+        </p>
+      </div>
+
+      <div class="form-group">
+        <label for="passwordRepeat">Повторіть пароль</label>
+        <input type="password" class="form-control" name="userPasswordRepeat" ng-model="newUser.paswordRepeat" required ng-pattern="newUser.password">
+        <p class="error" ng-show="regForm.userPasswordRepeat.$invalid && regForm.userPasswordRepeat.$dirty">
+          {{showError(regForm.userPasswordRepeat)}}
+        </p>
+      </div>
+
+      <button type="submit" class="btn btn-default" ng-disabled="regForm.$invalid">Відправити</button>
+    </form>
+  </div>
+</body>
+</html>

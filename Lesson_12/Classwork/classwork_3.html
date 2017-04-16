@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+    <title>Lesson 12. Classwork 3</title>
+    <meta charset="utf-8">
+    <script src="../../libraries/angular.js"></script>
+    <style>
+      body{
+        font-size: 1.2em;
+      }
+      table{
+        border: 1px solid black;
+        border-collapse: collapse;
+      }
+      tr{
+        border: 1px solid black;
+      }
+      td{
+        text-align: center;
+      }
+      td span{
+        padding: 20px;
+      }
+    </style>
+    <script>
+/*
+Используйте таблицу с данными массива items из предыдущей задачи. Реализуйте следующее:
+Добавьте на страницу 5 элементов checkbox с именами свойств элементов массива items(name, price и т.д.)
+Нажатие на каждый из checkbox скрывает/отображает соответствующее свойство элементов массива items в таблице
+Используйте директиву ng-switch
+*/
+
+var module = angular.module("myApp", []);
+
+module.controller("myAppCtrl", function ($scope) {
+  $scope.items = [
+    { name: "B Item", price: 10.9, category: "Category 1", count: 10, tax: 1.12, expiration: 10 },
+    { name: "A Item", price: 1.1, category: "Category 1", count: 8, tax: 0.55, expiration: 12 },
+    { name: "D Item", price: 2.6, category: "Category 2", count: 7, tax: 0.22, expiration: 5 },
+    { name: "C Item", price: 17.5, category: "Category 2", count: 33, tax: 2.77, expiration: 10 }];
+
+  $scope.columns = {
+    name: true,
+    price: true,
+    category: true,
+    count: true,
+    tax: true,
+    expiration: true
+  };
+
+});
+    </script>
+</head>
+
+<body ng-controller="myAppCtrl">
+
+    <form>
+      <div><label><input type="checkbox" ng-model="columns.name"> Name</label></div>
+      <div><label><input type="checkbox" ng-model="columns.price"> Price</label></div>
+      <div><label><input type="checkbox" ng-model="columns.category"> Category</label></div>
+      <div><label><input type="checkbox" ng-model="columns.count"> Count</label></div>
+      <div><label><input type="checkbox" ng-model="columns.tax"> Tax</label></div>
+      <div><label><input type="checkbox" ng-model="columns.expiration"> Expiration</label></div>
+    </form>
+
+    <br>
+
+    <table class="table">
+      <tr>
+        <th><span ng-show="columns.name">Name</span></th>
+        <th><span ng-show="columns.price">Price</span></th>
+        <th><span ng-show="columns.category">Category</span></th>
+        <th><span ng-show="columns.count">Count</span></th>
+        <th><span ng-show="columns.tax">Tax</span></th>
+        <th><span ng-show="columns.expiration">Expiration</span></th>
+      </tr>
+      <tr ng-repeat="item in items">
+        <td><span ng-include src="columns.name ? 'includes/name.html' : ''"></span></td>
+        <td><span ng-include src="columns.price  ? 'includes/price.html' : ''"></span></td>
+        <td><span ng-include src="columns.category ? 'includes/category.html' : ''"></span></td>
+        <td><span ng-include src="columns.count ? 'includes/count.html' : ''"></span></td>
+        <td><span ng-include src="columns.tax ? 'includes/tax.html' : ''"></span></td>
+        <td><span ng-include src="columns.expiration ? 'includes/expiration.html' : ''"></span></td>
+      </tr>
+    </table>
+
+</body>
+</html>

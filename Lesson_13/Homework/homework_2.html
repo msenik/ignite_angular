@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+    <title>Lesson 13. Homework 2</title>
+    <meta charset="utf-8">
+    <link href="../../libraries/bootstrap.css" rel="stylesheet" />
+    <link href="../../libraries/bootstrap-theme.css" rel="stylesheet" />
+    <script src="../../libraries/angular.js"></script>
+    <style>
+body{
+  padding: 20px;
+}
+.bs-callout {
+    padding: 20px;
+    margin: 10px 0;
+    border: 1px solid #428bca;
+    border-left-width: 5px;
+    border-radius: 3px;
+}
+    </style>
+    <script>
+/*
+Создайте страницу с десятью тегами div с текстом, полем ввода и кнопкой. Добавьте фильтр,
+который при вводе значения в поле и после нажатия на кнопку,
+покажет пользователю только те блоки, текст в которых соответствуют введеному значению.
+Остальные блоки должны быть скрыты.
+*/
+
+var phrases = [
+  "AngularJS supports parallel development",
+  "AngularJS comes with a framework size that suits a wide array of applications",
+  "AngularJS is backed by an active community of developers",
+  "With AngularJS, streamlined workflow is guaranteed by the built-in Intrinsic Dependency Injection feature",
+  "AngularJS supports seamless real-time app testing",
+  "Complex web app development is handled well by AngularJS framework",
+  "AngularJS is the perfect match for creating high performing single page applications",
+  "The Automatic Dirty Checking feature offers a quick way to access the model data",
+  "AngularJS is loaded with commendable Developers controls",
+  "The ease of classifying applications building block makes way for swift development of apps",
+];
+
+var module = angular.module("myApp", []);
+
+module.controller("myAppCtrl", function ($scope) {
+  $scope.phrases = phrases;
+
+  $scope.filteringText = '';
+  $scope.btnClickHandler = function() {
+    $scope.filteringText = $scope.enteredText;
+  }
+});
+
+    </script>
+</head>
+
+<body ng-controller="myAppCtrl">
+  <div class="container">
+
+    <form name="filteringForm" role="form" ng-submit="btnClickHandler($event)">
+      <div class="input-group">
+        <input type="text" class="form-control" placeholder="Text for filtering..." ng-model="enteredText">
+        <span class="input-group-btn">
+          <button class="btn btn-primary" type="submit">Go!</button>
+        </span>
+      </div>
+    </form>
+
+    <div ng-repeat="phrase in phrases | filter: filteringText" class="bs-callout bs-callout-warning">{{phrase}}</div>
+
+  </div>
+</body>
+</html>

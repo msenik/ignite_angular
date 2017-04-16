@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+    <title>Lesson 12. Homework 1</title>
+    <meta charset="utf-8">
+    <link href="../../libraries/bootstrap.css" rel="stylesheet" />
+    <link href="../../libraries/bootstrap-theme.css" rel="stylesheet" />
+    <script src="../../libraries/angular.js"></script>
+    <script>
+    /*
+Создайте приложение-калькулятор. В приложении должно быть два поля ввода и кнопки «+», «-», «*», «/».
+Реализуйте двунаправленную привязку таким образом, чтобы при нажатии на кнопки результат арифметических операций выводился на странице.
+    */
+
+    var module = angular.module("myApp", []);
+
+    module.controller("myAppCtrl", function ($scope) {
+      $scope.val1 = 0;
+      $scope.val2 = 0;
+      $scope.result = '';
+
+      $scope.clickHandler = function(e) {
+        var operation = e.target.textContent;
+        switch (operation) {
+          case '+':
+            $scope.result = $scope.val1 + $scope.val2;
+            break;
+          case '-':
+            $scope.result = $scope.val1 - $scope.val2;
+            break;
+          case '*':
+            $scope.result = $scope.val1 * $scope.val2;
+            break;
+          case '/':
+            $scope.result = $scope.val1 / $scope.val2;
+            break;
+        }
+      }
+    });
+
+    </script>
+</head>
+
+<body ng-controller="myAppCtrl">
+  <div class="container">
+    <form role="form">
+      <div class="form-group">
+        <label>Значення 1</label>
+        <input type="number" class="form-control" ng-model="val1">
+      </div>
+      <div class="form-group">
+        <label>Значення 2</label>
+        <input type="number" class="form-control" ng-model="val2">
+      </div>
+      <button class="btn btn-default" ng-click="clickHandler($event)">+</button>
+      <button class="btn btn-default" ng-click="clickHandler($event)">-</button>
+      <button class="btn btn-default" ng-click="clickHandler($event)">*</button>
+      <button class="btn btn-default" ng-click="clickHandler($event)">/</button>
+      <div style="padding-top:20px;"><strong>Результат: </strong> {{result}}</div>
+    </form>
+  </div>
+</body>
+</html>

@@ -1,0 +1,125 @@
+﻿<!DOCTYPE html>
+<html ng-app="myApp">
+
+<head>
+    <title>Lesson 11. Homework 2</title>
+    <script src="../Libraries/angular.js"></script>
+    <link href="../Libraries/bootstrap.css" rel="stylesheet" />
+    <link href="../Libraries/bootstrap-theme.css" rel="stylesheet" />
+    <style>
+        .alert-danger {
+            margin-top: 20px;
+        }
+    </style>
+    <script>
+/*
+Добавьте в предыдущую задачу возможность пользователя редактировать задачи и сохранять результат после редактирования.
+*/
+        var module = angular.module('myApp', []);
+        var model = [
+            {
+                id: 0,
+                name: 'Test task',
+                description: "Test description",
+                date: Date.now(),
+                complited: false,
+            }
+        ];
+
+        module.controller('taskCtrl', function ($scope) {
+            $scope.tasks = model;
+            $scope.isShowNotification = false;
+
+            $scope.addTask = function () {
+                if (!($scope.taskName && $scope.taskDueDate)) {
+                    $scope.isShowNotification = true;
+                    return;
+                }
+                model.push({
+                    id: $scope.tasks.length,
+                    name: $scope.taskName,
+                    description: $scope.taskDescription,
+                    date: $scope.taskDueDate,
+                    complited: $scope.taskComplited
+                });
+                $scope.taskName = $scope.taskDescription = $scope.taskDueDate = $scope.taskComplited = '';
+                $scope.isShowNotification = false;
+            }
+
+            $scope.editTask = function (id) {
+              $scope.id = id;
+              $scope.taskName = model[id].name;
+              $scope.taskDescription = model[id].description;
+              $scope.taskDueDate = model[id].date;
+              $scope.taskComplited = model[id].complited;
+              $scope.isEdit = true;
+            }
+
+            $scope.saveTask = function () {
+              model[$scope.id].name = $scope.taskName;
+              model[$scope.id].description = $scope.taskDescription;
+              model[$scope.id].date = $scope.taskDueDate;
+              model[$scope.id].complited = $scope.taskComplited;
+              $scope.id = '';
+              $scope.isEdit = false;
+              $scope.taskName = $scope.taskDescription = $scope.taskDueDate = $scope.taskComplited = '';
+            }
+
+        });
+    </script>
+</head>
+
+<body ng-controller="taskCtrl">
+    <div class="container">
+
+        <h3>ToDo List</h3>
+
+        <div style="height:250px; overflow-y:scroll;">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Date</th>
+                        <th>Completed</th>
+                        <th>Edit</th>
+                    </tr>
+                </thead>
+                <tr ng-repeat="task in tasks">
+                    <td>{{task.name}}</td>
+                    <td>{{task.description}}</td>
+                    <td>{{task.date | date: 'dd/MM/yyyy'}}</td>
+                    <td><input type="checkbox" disabled ng-checked="task.complited"></td>
+                    <td><button type="button" class="btn btn-default" ng-click="editTask(task.id)">Edit</button></td>
+                </tr>
+            </table>
+        </div>
+
+        <div>
+            <div ng-show="isShowNotification" class="alert alert-danger">All fields are required</div>
+            <form role="form">
+                <input type="hidden" ng-model="taskId">
+                <div class="form-group">
+                    <label for="taskName">Name</label>
+                    <input name="taskName" type="text" class="form-control" ng-model="taskName">
+                </div>
+                <div class="form-group">
+                    <label for="taskDueDate">Due Date</label>
+                    <input name="taskDueDate" type="date" class="form-control" ng-model="taskDueDate">
+                </div>
+                <div class="form-group">
+                    <label for="taskDescription">Description</label>
+                    <textarea name="taskDescription" class="form-control" ng-model="taskDescription"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Completed</label><br>
+                    <input name="taskComplited" type="checkbox" ng-model="taskComplited">
+                </div>
+                <button class="btn btn-default" ng-focus="1" ng-click="addTask()" ng-show="!isEdit">Add</button>
+                <button class="btn btn-default" ng-focus="1" ng-click="saveTask()" ng-show="isEdit">Save</button>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

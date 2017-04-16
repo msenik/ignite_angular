@@ -1,0 +1,25 @@
+﻿<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+    <title>Lesson 11. Classwork 2</title>
+    <script src="angular.js"></script>
+    <script>
+    /*Создайте страницу с полем ввода и кнопкой.
+    При нажатии на кнопку содержимое поля ввода должно отображаться на странице.*/
+var module = angular.module('myApp',[]);
+
+module.controller('myAppCtrl',['$scope',function($scope){
+$scope.newVal = '';
+$scope.showVal = function(){
+  $scope.newVal = $scope.val;
+}
+}]);
+    </script>
+</head>
+
+<body ng-controller="myAppCtrl">
+  <input type="text" ng-model="val"></input>
+  <button ng-click="showVal()">Show</button>
+  <div>{{newVal}}</div>
+</body>
+</html>

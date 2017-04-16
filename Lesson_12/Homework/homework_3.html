@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+    <title>Lesson 12. Homework 3</title>
+    <meta charset="utf-8">
+    <link href="../../libraries/bootstrap.css" rel="stylesheet" />
+    <link href="../../libraries/bootstrap-theme.css" rel="stylesheet" />
+    <script src="../../libraries/angular.js"></script>
+    <style>
+    #questions-conteiner, #ansvers-conteiner{
+      border: 1px solid #ccc;
+      min-height: 500px;
+    }
+    label{
+      display: block;
+      font-weight: normal;
+    }
+    #ansvers-conteiner pre{
+      margin-bottom: 30px;
+      padding: 15px;
+      background-color: #eee;
+    }
+    button{
+      margin-left: -15px;
+      margin-top: 20px;
+    }
+    .pass{
+      color: green;
+    }
+    .fail{
+      color: red;
+    }
+    @media screen and (max-width: 940px) {
+      #questions-conteiner, #ansvers-conteiner{
+        min-height: 0;
+      }
+      #ansvers-conteiner{
+
+      }
+    }
+    </style>
+    <script>
+    /*
+Реализуйте SPA приложение, в котором пользователю представляется пройти тест из 5 вопросов,
+в каждом вопросе по 4 варианта ответа. Вопросы должны выбираться с помощью radio-button и когда выбран,
+например, вопрос №1, то на странице должны появится варианты ответа только для этого вопроса.
+В конце тестирования отобразите результат теста. При решении данной задачи используйте директиву ng-switch.
+    */
+
+var module = angular.module("myApp", []);
+
+module.controller("myAppCtrl", function ($scope) {
+
+  $scope.questions = 'question1';
+  $scope.showResult = false;
+  $scope.correctCnt = 0;
+
+  $scope.ansvers = [null,null,null,null,null];
+  $scope.resultItems = [];
+  var correctAnsvers = [2,2,4,1,2];
+
+
+  $scope.showResultBtnHandler = function(){
+    $scope.showResult = true;
+    $scope.correctCnt = correctAnsvers.filter(function(elem,i){
+      if(elem == $scope.ansvers[i]){
+        $scope.resultItems[i] = 'pass';
+        return true;
+      } else{
+        $scope.resultItems[i] = 'fail';
+        return false;
+      }
+    }).length;
+  }
+
+
+});
+    </script>
+</head>
+
+<body ng-controller="myAppCtrl">
+  <div class="container" style="padding-top:20px;">
+    <h1 class="text-center">JavaScript test</h2>
+    <div class="row">
+      <div id="questions-conteiner" class="col-md-4">
+        <h2>Questions</h2>
+          <label>
+            <input type="radio" ng-model="questions" value="question1">
+            Questions 1
+          </label>
+
+          <label>
+            <input type="radio" ng-model="questions" value="question2">
+            Questions 2
+          </label>
+
+          <label>
+            <input type="radio" ng-model="questions" value="question3">
+            Questions 3
+          </label>
+
+          <label>
+            <input type="radio" ng-model="questions" value="question4">
+            Questions 4
+          </label>
+
+          <label>
+            <input type="radio" ng-model="questions" value="question5">
+            Questions 5
+          </label>
+
+          <div id="result" ng-if="showResult">
+            <h2>Result</h2>
+              <p ng-class="resultItems[0]">Questions 1 - correct: 2; your answer: {{ansvers[0]}}</p>
+              <p ng-class="resultItems[1]">Questions 2 - correct: 2; your answer: {{ansvers[1]}}</p>
+              <p ng-class="resultItems[2]">Questions 3 - correct: 4; your answer: {{ansvers[2]}}</p>
+              <p ng-class="resultItems[3]">Questions 4 - correct: 1; your answer: {{ansvers[3]}}</p>
+              <p ng-class="resultItems[4]">Questions 4 - correct: 2; your answer: {{ansvers[4]}}</p>
+              <p><strong>Your result is {{correctCnt}} correct answers</strong></p>
+          </div>
+      </div>
+
+      <div id="ansvers-conteiner" class="col-md-8" ng-switch="questions">
+
+        <div ng-switch-when="question1">
+          <h3>Чему равно такое выражение?</h3>
+          <pre>[] + false - null + true</pre>
+          <label><input type="radio" ng-model="ansvers[0]" value="1"> 0</label>
+          <label><input type="radio" ng-model="ansvers[0]" value="2"> NaN</label>
+          <label><input type="radio" ng-model="ansvers[0]" value="3"> undefined</label>
+          <label><input type="radio" ng-model="ansvers[0]" value="4"> null</label>
+        </div>
+
+        <div ng-switch-when="question2">
+          <h3>Что выведет этот код?</h3>
+          <pre>f.call(f);
+
+function f() {
+  alert( this );
+}</pre>
+          <label><input type="radio" ng-model="ansvers[1]" value="1"> [object Object]</label>
+          <label><input type="radio" ng-model="ansvers[1]" value="2"> код функции f.</label>
+          <label><input type="radio" ng-model="ansvers[1]" value="3"> ошибка: слишком глубокая рекурсия.</label>
+          <label><input type="radio" ng-model="ansvers[1]" value="4"> ошибка: переменная f не определена.</label>
+        </div>
+
+        <div ng-switch-when="question3">
+          <h3>Что выведет этот код? Посмотрите на него очень внимательно, в этом вопросе есть подвох.</h3>
+          <pre>var a = [1,2]
+
+(function() { alert(a) })()</pre>
+          <label><input type="radio" ng-model="ansvers[2]" value="1"> [object Array]</label>
+          <label><input type="radio" ng-model="ansvers[2]" value="2"> [object Object]</label>
+          <label><input type="radio" ng-model="ansvers[2]" value="3"> 1,2</label>
+          <label><input type="radio" ng-model="ansvers[2]" value="4"> Будет ошибка.</label>
+        </div>
+
+        <div ng-switch-when="question4">
+          <h3>Какое будет выведено значение?</h3>
+          <pre>var x = 5;
+alert( x++ );</pre>
+          <label><input type="radio" ng-model="ansvers[3]" value="1"> 5</label>
+          <label><input type="radio" ng-model="ansvers[3]" value="2"> NaN</label>
+          <label><input type="radio" ng-model="ansvers[3]" value="3"> 6</label>
+          <label><input type="radio" ng-model="ansvers[3]" value="4"> Другое</label>
+        </div>
+
+        <div ng-switch-when="question5">
+          <h3>Чему будет равен this?</h3>
+          <pre>"use strict";
+
+var user = {
+  sayHi: function() {
+    alert(this);
+  }
+};
+
+(user.sayBye = user.sayHi)();</pre>
+          <label><input type="radio" ng-model="ansvers[4]" value="1"> null</label>
+          <label><input type="radio" ng-model="ansvers[4]" value="2"> undefined</label>
+          <label><input type="radio" ng-model="ansvers[4]" value="3"> Объекту user</label>
+          <label><input type="radio" ng-model="ansvers[4]" value="4"> В коде ошибка</label>
+        </div>
+
+      </div>
+    </div>
+
+    <button class="btn btn-primary btn-lg" ng-click="showResultBtnHandler()">Submit test</button>
+
+  </div>
+</body>
+</html>
