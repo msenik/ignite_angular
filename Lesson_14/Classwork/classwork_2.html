@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+    <title>Lesson 14. Classwork 2</title>
+    <meta charset="utf-8">
+    <script src="../../libraries/angular.js"></script>
+    <style>
+
+    </style>
+    <script>
+/*
+Создайте сервис из предыдущей задачи, используя метод провайдера.
+*/
+var module = angular.module("myApp", []);
+
+module.provider('clickCounter', function () {
+  var clickCounter = 0;
+  return {
+    setStartValue: function(val){
+      if( angular.isDefined(val) ){
+          clickCounter = val;
+      }
+    },
+
+    $get: function($log){
+      return function(){
+        $log.log(++clickCounter);
+      }
+    }
+  }
+});
+
+module.config(function (clickCounterProvider) {
+    clickCounterProvider.setStartValue(10);
+});
+
+module.controller("myAppCtrl", function ($scope, clickCounter) {
+  $scope.clickHandler = function() {
+    clickCounter();
+  }
+});
+
+    </script>
+</head>
+
+<body ng-controller="myAppCtrl">
+  <button ng-click="clickHandler()">Click me!</button>
+</body>
+</html>

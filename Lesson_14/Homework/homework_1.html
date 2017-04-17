@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+
+<head>
+  <title>Lesson 14. Classwork 1</title>
+  <meta charset="utf-8">
+  <script src="../../libraries/angular.js"></script>
+  <style>
+  </style>
+  <script>
+    /*
+    Создайте сервис, который предоставляет стандартные математические операции – сложение, умножение и т.д.
+    Используйте три разных способа для создания сервиса.
+    */
+    var module = angular.module("myApp", []);
+
+    module.controller("myAppCtrl", function($scope, mathService1, mathService2, mathService3) {
+      $scope.serviceType = 'factory';
+
+      $scope.btnClickHandler = function(op) {
+        switch ($scope.serviceType) {
+          case 'factory':
+            $scope.result = mathService1[op]($scope.val1, $scope.val2);
+            break;
+          case 'service':
+            $scope.result = mathService2[op]($scope.val1, $scope.val2);
+            break;
+          case 'provider':
+            $scope.result = mathService3[op]($scope.val1, $scope.val2);
+            break;
+        }
+      }
+    });
+
+    module.factory('mathService1', function() {
+      return {
+        sum: function(a, b) {
+          return a + b;
+        },
+        dif: function(a, b) {
+          return a - b;
+        },
+        mul: function(a, b) {
+          return a * b;
+        },
+        div: function(a, b) {
+          return a / b;
+        },
+      }
+    });
+
+    module.service("mathService2", function() {
+      this.sum = function(a, b) {
+        return a + b;
+      };
+      this.dif = function(a, b) {
+        return a - b;
+      };
+      this.mul = function(a, b) {
+        return a * b;
+      };
+      this.div = function(a, b) {
+        return a / b;
+      };
+    });
+
+    module.provider("mathService3", function() {
+      return {
+        $get: function() {
+          return {
+            sum: function(a, b) {
+              return a + b;
+            },
+            dif: function(a, b) {
+              return a - b;
+            },
+            mul: function(a, b) {
+              return a * b;
+            },
+            div: function(a, b) {
+              return a / b;
+            },
+          };
+        }
+      }
+    });
+  </script>
+</head>
+
+<body ng-controller="myAppCtrl">
+  <div>
+    <input type="number" placeholder="Value 1" ng-model="val1">
+    <button ng-click="btnClickHandler('sum')">+</button>
+    <button ng-click="btnClickHandler('dif')">-</button>
+    <button ng-click="btnClickHandler('mul')">x</button>
+    <button ng-click="btnClickHandler('div')">/</button>
+    <input type="number" placeholder="Value 2" ng-model="val2">
+    <p>Result: {{result}}</p>
+
+    <div>
+      <h3>Select type of service</h3>
+      <label>
+        <input type="radio" value="factory" name="serviceChanger" ng-model="serviceType" ng-checked="true"> Factory</label>
+      <label>
+        <input type="radio" value="service" name="serviceChanger" ng-model="serviceType"> Service</label>
+      <label>
+        <input type="radio" value="provider" name="serviceChanger" ng-model="serviceType"> Provider</label>
+    </div>
+  </div>
+</body>
+
+</html>

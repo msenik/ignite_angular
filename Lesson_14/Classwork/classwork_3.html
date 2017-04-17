@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+    <title>Lesson 14. Classwork 3</title>
+    <meta charset="utf-8">
+    <link href="../../libraries/bootstrap.css" rel="stylesheet" />
+    <link href="../../libraries/bootstrap-theme.css" rel="stylesheet" />
+    <script src="../../libraries/angular.js"></script>
+    <style>
+
+    </style>
+    <script>
+/*
+Используйте сервис $http для получения данных из файла data.json, который находится в папке data.
+Отобразите полученные данные на странице в виде таблицы.
+Предусмотрите обработку ошибок в запросе (используя Promise).
+*/
+
+
+var module = angular.module("myApp", [])
+  .controller("myAppCtrl", function ($scope, $http) {
+    $scope.data = {};
+    $http({
+      method: 'GET',
+      url: 'data/data.json'
+    }).then(function successCallback(response) {
+        $scope.data = response.data;
+      }, function errorCallback(err) {
+        alert('Error: ' + (err.message || err.statusText) );
+      });
+  });
+
+    </script>
+</head>
+
+<body ng-controller="myAppCtrl">
+  <div class='container'>
+    <table class="table">
+      <tr>
+        <th>Name</th>
+        <th>Price</th>
+      </tr>
+      <tr ng-repeat="item in data">
+        <td>{{item.name}}</td>
+        <td>{{item.price}}</td>
+      </tr>
+    </table>
+  </div>
+</body>
+</html>

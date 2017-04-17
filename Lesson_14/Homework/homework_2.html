@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+
+<head>
+  <title>Lesson 11. Homework 1</title>
+  <script src="../../libraries/angular.js"></script>
+  <link href="../../libraries/bootstrap.css" rel="stylesheet" />
+  <link href="../../libraries/bootstrap-theme.css" rel="stylesheet" />
+  <style>
+    .alert-danger {
+      margin-top: 20px;
+    }
+  </style>
+  <script>
+    /*
+    Откройте файл Task/Task.html.Вам необходимо разработать приложение “To do List”.
+    Приложение должно отображать пользователю таблицу с задачами и предоставлять возможность добавлять новые задачи.
+    Приложение должно быть построено по шаблону, который находится в папке Task в файле template.png
+    */
+    var module = angular.module('myApp', []);
+    var model = [{
+      name: 'Test task',
+      description: "Test description",
+      date: Date.now(),
+      complited: false,
+    }];
+
+    module.factory('sendData', function($http, $filter, $log) {
+      return function(obj) {
+        var data = $filter('json')(obj);
+        alert(data);
+        $http({
+          method: 'POST',
+          url: 'server.js',
+          data: data
+        }).catch(function errorCallback(err) {
+          $log.error('Error: ' + (err.message || err.statusText));
+        });
+      }
+    });
+
+    module.controller('taskCtrl', function($scope, sendData) {
+      $scope.tasks = model;
+      $scope.isShowNotification = false;
+
+      $scope.addTask = function() {
+        if (!($scope.taskName && $scope.taskDueDate)) {
+          $scope.isShowNotification = true;
+          return;
+        }
+
+        var taskObj = {
+          name: $scope.taskName,
+          description: $scope.taskDescription,
+          date: $scope.taskDueDate,
+          complited: $scope.taskComplited || false
+        };
+        model.push(taskObj);
+        sendData(taskObj);
+
+        $scope.taskName = $scope.taskDescription = $scope.taskDueDate = $scope.taskComplited = '';
+        $scope.isShowNotification = false;
+      }
+
+    });
+  </script>
+</head>
+
+<body ng-controller="taskCtrl">
+  <div class="container">
+
+    <h3>ToDo List</h3>
+
+    <div style="height:250px; overflow-y:scroll;">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Date</th>
+            <th>Completed</th>
+          </tr>
+        </thead>
+        <tr ng-repeat="task in tasks">
+          <td>{{task.name}}</td>
+          <td>{{task.description}}</td>
+          <td>{{task.date | date: 'dd/MM/yyyy'}}</td>
+          <td>
+            <input type="checkbox" disabled ng-checked="task.complited">
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <div>
+      <div ng-show="isShowNotification" class="alert alert-danger">All fields are required</div>
+      <form role="form">
+        <div class="form-group">
+          <label for="taskName">Name</label>
+          <input name="taskName" type="text" class="form-control" ng-model="taskName">
+        </div>
+        <div class="form-group">
+          <label for="taskDueDate">Due Date</label>
+          <input name="taskDueDate" type="date" class="form-control" ng-model="taskDueDate">
+        </div>
+        <div class="form-group">
+          <label for="taskDescription">Description</label>
+          <textarea name="taskDescription" class="form-control" ng-model="taskDescription"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Completed</label>
+          <br>
+          <input name="taskComplited" type="checkbox" ng-model="taskComplited">
+        </div>
+        <button class="btn btn-default" ng-focus="1" ng-click="addTask()">Add</button>
+      </form>
+    </div>
+  </div>
+</body>
+
+</html>
