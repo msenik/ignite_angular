@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+
+<head>
+  <title>Lesson 15. Homework 3</title>
+  <meta charset="utf-8">
+  <script src="../../libraries/angular.js"></script>
+  <style>
+    div{
+      padding: 10px 0;
+      font-size: 2em;
+      color: orange;
+    }
+    span{
+      font-size: .5em;
+      color: black;
+    }
+  </style>
+  <script>
+    /*
+    Задача 3 Разработайте приложение-секундомер. На странице должно быть 3 кнопки:
+    start – начать отсчет
+    stop – остановить отсчет
+    clear – сброс отсчета
+    */
+    var module = angular.module("myApp", []);
+
+    module.controller("myAppCtrl", function($scope, $interval) {
+      $scope.Math = window.Math;
+      var interval = null;
+      var chunks = [];
+      $scope.miliseconds = 0;
+
+      $scope.start = function(){
+        if(interval) {return}
+        var startTime = Date.now();
+        chunks.push(startTime);
+
+        interval = $interval(function(){
+          chunks[chunks.length-1] = Date.now() - startTime;
+          $scope.miliseconds = chunks.reduce(function(prev,curr){
+            return prev + curr;
+          });
+        },1);
+      }
+
+      $scope.stop = function(){
+         $interval.cancel(interval);
+         interval = null;
+      }
+
+      $scope.clear = function(){
+         $interval.cancel(interval);
+         interval = null;
+         chunks = [];
+         $scope.miliseconds = 0;
+      }
+    });
+  </script>
+</head>
+
+<body ng-controller="myAppCtrl">
+  <h1>Секундомір</h1>
+  <p><em>Кількість годин може перевищувати 24.</em></p>
+  <button ng-click="start()">Start</button>
+  <button ng-click="stop()">Stop</button>
+  <button ng-click="clear()">Reset</button>
+  <div>{{ Math.floor(miliseconds/(1000*60*60)) }}:{{miliseconds | date : "mm:ss"}}
+      <span> {{ (miliseconds | date : "sss").slice(0,2) }}</span>
+  </div>
+</body>
+
+</html>

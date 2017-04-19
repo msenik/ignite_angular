@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+
+<head>
+  <title>Lesson 15. Homework 2</title>
+  <meta charset="utf-8">
+  <script src="../../libraries/angular.js"></script>
+  <link href="../../libraries/bootstrap.css" rel="stylesheet" />
+  <link href="../../libraries/bootstrap-theme.css" rel="stylesheet" />
+  <style>
+    body {
+      padding: 20px 0;
+    }
+  </style>
+  <script>
+    /*Используя любой сторонний сервис, измените усовершенствуйте решение задачи 2,так что бы прокрутка выполнялась плавно.*/
+
+    var module = angular.module("myApp", []);
+
+    module.service('anchorSmoothScroll', function() {
+      this.scrollTo = function(eID) {
+        // This scrolling function
+        // is from http://www.itnewb.com/tutorial/Creating-the-Smooth-Scroll-Effect-with-JavaScript
+        var startY = currentYPosition();
+        var stopY = elmYPosition(eID);
+        var distance = stopY > startY ? stopY - startY : startY - stopY;
+        if (distance < 100) {
+          scrollTo(0, stopY);
+          return;
+        }
+        var speed = Math.round(distance / 100);
+        if (speed >= 20) speed = 20;
+        var step = Math.round(distance / 25);
+        var leapY = stopY > startY ? startY + step : startY - step;
+        var timer = 0;
+        if (stopY > startY) {
+          for (var i = startY; i < stopY; i += step) {
+            setTimeout("window.scrollTo(0, " + leapY + ")", timer * speed);
+            leapY += step;
+            if (leapY > stopY) leapY = stopY;
+            timer++;
+          }
+          return;
+        }
+        for (var i = startY; i > stopY; i -= step) {
+          setTimeout("window.scrollTo(0, " + leapY + ")", timer * speed);
+          leapY -= step;
+          if (leapY < stopY) leapY = stopY;
+          timer++;
+        }
+
+        function currentYPosition() {
+          // Firefox, Chrome, Opera, Safari
+          if (self.pageYOffset) return self.pageYOffset;
+          // Internet Explorer 6 - standards mode
+          if (document.documentElement && document.documentElement.scrollTop)
+            return document.documentElement.scrollTop;
+          // Internet Explorer 6, 7 and 8
+          if (document.body.scrollTop) return document.body.scrollTop;
+          return 0;
+        }
+
+        function elmYPosition(eID) {
+          var elm = document.getElementById(eID);
+          var y = elm.offsetTop;
+          var node = elm;
+          while (node.offsetParent && node.offsetParent != document.body) {
+            node = node.offsetParent;
+            y += node.offsetTop;
+          }
+          return y;
+        }
+
+      };
+
+    });
+
+    module.controller("myAppCtrl", function($scope, $location, anchorSmoothScroll) {
+
+      $scope.counter = new Array(10);
+      $scope.gotoHeader = function(event, index) {
+        event.preventDefault();
+        $location.path('');
+        $location.hash('header_' + index);
+        anchorSmoothScroll.scrollTo('header_' + index);
+      }
+    });
+  </script>
+</head>
+
+<body ng-controller="myAppCtrl">
+  <div class="container">
+    <ul class="nav nav-pills">
+      <li role="presentation" ng-repeat="n in counter track by $index"><a href="#" ng-click="gotoHeader($event, $index+1)">Header {{$index+1}}</a>
+      </li>
+    </ul>
+
+    <div ng-repeat="n in counter track by $index">
+      <h2 id="header_{{$index+1}}">Header {{$index+1}}</h2>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. sExcepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+      </p>
+    </div>
+  </div>
+</body>
+
+</html>

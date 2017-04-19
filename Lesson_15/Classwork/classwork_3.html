@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+    <title>Lesson 14. Classwork 3</title>
+    <meta charset="utf-8">
+    <link href="../../libraries/bootstrap.css" rel="stylesheet" />
+    <link href="../../libraries/bootstrap-theme.css" rel="stylesheet" />
+    <script src="../../libraries/angular.js"></script>
+    <style>
+    body{
+      padding: 20px;
+    }
+    </style>
+    <script>
+/*
+Используя сервис $compile выведите имя в шаблоне жирным начертанием используя тег :
+"Hello my name is {{name}}"
+var data = { name: "<strong>Ivan</strong>" }
+*/
+
+var data = { name: "<strong>Ivan</strong>" };
+
+var module = angular.module("myApp", [])
+  .controller("myAppCtrl", function ($scope, $compile, $sce) {
+    $scope.name = $sce.trustAsHtml(data.name);
+    var boldTxt = $compile('<div ng-bind-html="name"></div>')($scope);
+    angular.element(document.getElementById('wrapper')).append(boldTxt);
+  });
+
+    </script>
+</head>
+
+<body ng-controller="myAppCtrl">
+  <div id="wrapper">
+
+  </div>
+</body>
+</html>
