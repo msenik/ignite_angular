@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+  <title>Lesson 15. Homework 1</title>
+  <meta charset="utf-8">
+  <link href="../../libraries/bootstrap.css" rel="stylesheet" />
+  <link href="../../libraries/bootstrap-theme.css" rel="stylesheet" />
+  <script src="../../libraries/angular.js"></script>
+  <script src="../../libraries/angular_route.js"></script>
+  <script>
+    /*
+      Создайте страницу с панелью навигации со следуюшими пунктами: home, contact.
+      Используйте маршрутизацию для переключения меду пунктами меню.
+      Файлы для задачи находятся в папке Task.
+    */
+    var app = angular.module("myApp", ['ngRoute'])
+
+    .config(function($routeProvider) {
+      $routeProvider
+        .when('/home', {
+          templateUrl: 'Task/home.html',
+        })
+        .when('/contact', {
+          templateUrl: 'Task/contact.html'
+        })
+        .otherwise({
+          redirectTo: '/'
+        })
+    })
+
+    .controller("myAppCtrl", function($scope) {
+
+    });
+  </script>
+</head>
+
+<body ng-controller="myAppCtrl">
+  <nav class="navbar navbar-default navbar-static-top">
+    <div class="container">
+      <ul class="nav navbar-nav">
+        <li><a href="#/home">Home</a></li>
+        <li><a href="#/contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div ng-view></div>
+  </div>
+
+</body>
+</html>

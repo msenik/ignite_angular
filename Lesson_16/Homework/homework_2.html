@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+  <title>Lesson 15. Homework 2</title>
+  <meta charset="utf-8">
+  <link href="../../libraries/bootstrap.css" rel="stylesheet" />
+  <link href="../../libraries/bootstrap-theme.css" rel="stylesheet" />
+  <script src="../../libraries/angular.js"></script>
+  <script src="../../libraries/angular_route.js"></script>
+  <base href="/">
+  <script>
+    /*
+      Добавьте в шаблон страницы home список со свойством name из следующего массива:
+      Добавьте на страницу поддержку htm5Mode.
+    */
+    var people = [{name: 'Vasya', age: 20, email: 'vasya@mail.ru', employed: false},
+      {name: 'Masha', age: 25, email: 'm@m', employed: true},
+      {name: 'Petya', age: 27, email: 'petya@stuff', employed: true},
+      {name: 'John', age: 36, email: 'johnDoe@mail', employed: true},
+      {name: 'Jane', age: 28, email: 'janeDoe@mail', employed: false}
+    ];
+
+    var app = angular.module("myApp", ['ngRoute']);
+
+    app.config(function($routeProvider, $locationProvider) {
+      $routeProvider
+        .when('/home', {
+          templateUrl: 'Task/home2.html',
+        })
+        .when('/contact', {
+          templateUrl: 'Task/contact.html'
+        })
+        .otherwise({
+          redirectTo: '/home'
+        })
+        $locationProvider.html5Mode(true);
+    });
+
+    app.controller("myAppCtrl", function($scope) {
+        $scope.people = people;
+    });
+
+  </script>
+</head>
+
+<body ng-controller="myAppCtrl">
+  <nav class="navbar navbar-default navbar-static-top">
+    <div class="container">
+      <ul class="nav navbar-nav">
+        <li><a href="/home">Home</a></li>
+        <li><a href="/contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div ng-view></div>
+  </div>
+
+</body>
+</html>

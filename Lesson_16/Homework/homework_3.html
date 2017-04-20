@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+  <title>Lesson 15. Homework 3</title>
+  <meta charset="utf-8">
+  <link href="../libraries/bootstrap.css" rel="stylesheet" />
+  <link href="../libraries/bootstrap-theme.css" rel="stylesheet" />
+  <script src="../libraries/angular.js"></script>
+  <script src="../libraries/angular_route.js"></script>
+  <base href="/">
+  <script>
+    /*
+      Добавьте на страницу следующий функционал:
+      При клике по элементу списка на странице home,
+      пользователь перенаправляется на страницу contact по адресу ‘/contact + routeParams’,
+      где routeParams – параметры маршрутизации, созданные с помощью сервиса $routeParams,
+      представляющие собой значения свойств массива people для элемента, по которому кликнул пользователь.
+      Используйте данные, переданные через $routeParams, для автозаполнения формы на странице contact
+    */
+
+    var people = [{name: 'Vasya', age: 20, email: 'vasya@mail.ru', employed: false},
+      {name: 'Masha', age: 25, email: 'm@m', employed: true},
+      {name: 'Petya', age: 27, email: 'petya@stuff', employed: true},
+      {name: 'John', age: 36, email: 'johnDoe@mail', employed: true},
+      {name: 'Jane', age: 28, email: 'janeDoe@mail', employed: false}
+    ];
+
+    var app = angular.module("myApp", ['ngRoute']);
+
+    app.config(function($routeProvider, $locationProvider) {
+      $routeProvider
+        .when('/home', {
+          templateUrl: 'Task/home3.html',
+        })
+        .when('/contact', {
+          templateUrl: 'Task/contact.html'
+        })
+        .when('/contact/:name/:age/:email/:employed', {
+          templateUrl: 'Task/contact.html',
+          controller: 'contactCtrl'
+        })
+        .otherwise({
+          redirectTo: '/home'
+        })
+        $locationProvider.html5Mode(true);
+    });
+
+    app.controller("myAppCtrl", function($scope, $location) {
+        $scope.people = people;
+        $scope.editHuman = function(human) {
+          var path = 'contact/'+human.name+'/'+human.age+'/'+human.email+'/'+human.employed;
+          $location.path(path);
+        }
+    });
+
+    app.controller("contactCtrl", function($scope, $routeParams) {
+      for(prop in $routeParams){
+        $scope[prop] = $routeParams[prop];
+      }
+      $scope.employed = JSON.parse($routeParams[prop]);
+    });
+
+  </script>
+</head>
+
+<body ng-controller="myAppCtrl">
+  <nav class="navbar navbar-default navbar-static-top">
+    <div class="container">
+      <ul class="nav navbar-nav">
+        <li><a href="/home">Home</a></li>
+        <li><a href="/contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div ng-view></div>
+  </div>
+
+</body>
+</html>
