@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+
+<head>
+  <title>Lesson 17. Homework 3</title>
+  <meta charset="utf-8">
+  <link href="../../libraries/bootstrap.css" rel="stylesheet" />
+  <link href="../../libraries/bootstrap-theme.css" rel="stylesheet" />
+  <script src="../../libraries/angular.js"></script>
+
+  <script type="text/ng-templete" id="menuTpl">
+    <ul class="nav nav-pills">
+      <li ng-repeat="item in data" role="presentation"><a href="{{item.href}}" target="_blank">{{item.text}}</a></li>
+    </ul>
+  </script>
+
+  <style>
+  body{
+    padding: 20px 0;
+  }
+  </style>
+  <script>
+    /*
+    Создайте директиву для генерации меню.
+    В качестве источника данных директива должна использовать массив объектов,
+    одно из свойств объекта должено содержать текст элемента меню,
+    второе свойство должно использоватся для определения адреса перехода при клике по элементу меню.
+    */
+
+    var app = angular.module("myApp", [])
+    .directive("menuGenerator",function(){
+      return {
+        template: function(){
+          return angular.element(document.getElementById('menuTpl')).html();
+        },
+      }
+    })
+    .controller("appCtrl", function($scope){
+      $scope.data = [
+        {text:'AngularJS',href:'https://angularjs.org/'},
+        {text:'React',href:'https://facebook.github.io/react/'},
+        {text:'Vue.js',href:'https://vuejs.org/'},
+      ];
+    });
+
+  </script>
+</head>
+
+<body ng-controller="appCtrl">
+  <div class="container">
+    <div menu-generator="data"></div>
+  </div>
+</body>
+
+</html>

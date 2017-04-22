@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+
+<head>
+  <title>Lesson 17. Homework 2</title>
+  <meta charset="utf-8">
+  <link href="../../libraries/bootstrap.css" rel="stylesheet" />
+  <link href="../../libraries/bootstrap-theme.css" rel="stylesheet" />
+  <script src="../../libraries/angular.js"></script>
+
+  <script type="text/ng-templete" id="paragraphTemplete">
+    <p ng-repeat="text in paragraphs track by $index">{{text}}</p>
+  </script>
+
+  <style>
+  body{
+    padding: 20px 0;
+  }
+  </style>
+  <script>
+    /*
+      Создайте директиву, которая на основе массива будет создавать определенное количество параграфов:
+      генерация должна происходить не с помощью jqLite, а с помощью шаблона,
+      директиву можно применить только как атрибут,
+      сгенерированный контент должен полностью заменить собой элемент, к которому применяется директива,
+      у неё должен быть независимый scope.
+    */
+    var data = [
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.",
+      "quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      "fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia."
+    ];
+
+    var app = angular.module("myApp", [])
+    .directive("paragraphsFromArr",function(){
+      return {
+        restrict: 'A',
+        replace: true,
+        scope: {
+          paragraphs: '=paragraphsFromArr'
+        },
+        template: function(){
+          return angular.element(document.getElementById('paragraphTemplete')).html();
+        },
+
+      }
+    })
+    .controller("appCtrl", function($scope){
+      $scope.data = data;
+    });
+
+  </script>
+</head>
+
+<body ng-controller="appCtrl">
+  <div class="container">
+    <div paragraphs-from-arr="data"></div>
+  </div>
+</body>
+
+</html>

@@ -1,0 +1,36 @@
+<form role="form" novalidate name="regForm" ng-submit="submitHandler()">
+
+  <div class="form-group">
+    <label>User Name:</label>
+    <input type="text" class="form-control" name="userName" ng-model="newUser.name" required>
+    <p class="error" ng-show="regForm.userName.$invalid && regForm.userName.$dirty">
+      {{showError(regForm.userName)}}
+    </p>
+  </div>
+
+  <div class="form-group">
+    <label>Login:</label>
+    <input type="text" class="form-control" name="userLogin" ng-trim="false" pattern="^[a-z0-9]+$" ng-model="newUser.login" required>
+    <p class="error" ng-show="regForm.userLogin.$invalid && regForm.userLogin.$dirty">
+      {{showError(regForm.userLogin)}}
+    </p>
+  </div>
+
+  <div class="form-group">
+    <label>Password</label>
+    <input type="password" class="form-control" name="userPassword" pattern="^\w{3,16}$" ng-model="newUser.password" required>
+    <p class="error" ng-show="regForm.userPassword.$invalid && regForm.userPassword.$dirty">
+      {{showError(regForm.userPassword)}}
+    </p>
+  </div>
+
+  <div class="form-group">
+    <label>Email</label>
+    <input type="email" class="form-control" name="userEmail" ng-model="newUser.email" required>
+    <p class="error" ng-show="regForm.userEmail.$invalid && regForm.userEmail.$dirty">
+      {{showError(regForm.userEmail)}}
+    </p>
+  </div>
+
+  <button type="submit" class="btn btn-default" ng-disabled="regForm.$invalid">Send</button>
+</form>

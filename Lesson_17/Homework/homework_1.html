@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+
+<head>
+  <title>Lesson 17. Homework 1</title>
+  <meta charset="utf-8">
+  <link href="../../libraries/bootstrap.css" rel="stylesheet" />
+  <link href="../../libraries/bootstrap-theme.css" rel="stylesheet" />
+  <script src="../../libraries/angular.js"></script>
+  <style>
+    body {
+      padding: 20px 20px;
+    }
+    td,th{
+      border: 1px solid #ddd;
+    }
+  </style>
+  <script>
+    /*
+    Создайте пользовательскую директиву, которой можно передать массив объектов,
+    а результатом её работы будет сгенерированная таблица. Столбцы таблицы,
+    будут соответствовать свойствам объекта. Используйте подход с link function
+    и генерацию элементов с помощью jqLite.
+    */
+
+    var people = [
+      {name: 'John', age:28, gender: 'male'},
+      {name: 'Jane', age:22, gender: 'female'},
+      {name: 'Michael', age:30, gender: 'male'},
+      {name: 'Kate', age:24, gender: 'female'},
+      {name: 'Staisy', age:25,  gender: 'female'},
+    ]
+
+    var app = angular.module("myApp", [])
+
+    .directive("peopleTable",function(){
+      return function(scope,el,attr){
+        var attrVal = attr['peopleTable'];
+        var data = scope[attrVal];
+        if(angular.isArray(data) && data.length > 0){
+          var table = angular.element('<table class="table table-bordered">')
+          var headTr = angular.element('<tr>');
+          table.append(headTr);
+
+          for(var th in data[0]){
+            headTr.append(angular.element('<th>'+th+'</th>'));
+          }
+
+          for(var i = 0; i<data.length; i++){
+            var tr = angular.element('<tr>');
+            table.append(tr);
+            for(var td in data[i]){
+              var td = angular.element('<td>').text(data[i][td]);
+              tr.append(td);
+            }
+          }
+
+          el.append(table);
+        }
+      }
+    })
+    .controller("appCtrl", function($scope){
+      $scope.people = people;
+    })
+  </script>
+</head>
+
+<body ng-controller="appCtrl">
+  <div people-table="people" class="container"></div>
+</body>
+
+</html>

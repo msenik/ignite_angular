@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+
+<head>
+  <title>Lesson 17. Classwork 1</title>
+  <meta charset="utf-8">
+  <link href="../../libraries/bootstrap.css" rel="stylesheet" />
+  <link href="../../libraries/bootstrap-theme.css" rel="stylesheet" />
+  <script src="../../libraries/angular.js"></script>
+  <style>
+    body {
+      padding: 20px 20px;
+    }
+  </style>
+  <script>
+    /*
+    Создайте пользовательскую директиву, которой можно передать массив,
+    а результатом её работы будет сгенерированный список.
+    */
+
+    var people = [
+      {name: 'John', age:28},
+      {name: 'Jane', age:22},
+      {name: 'Michael', age:30},
+      {name: 'Kate', age:24},
+      {name: 'Staisy', age:25},
+    ]
+
+    var app = angular.module("myApp", [])
+    .directive("peopleList",function(){
+      return function(scope,el,attr){
+        var attrVal = attr['peopleList'];
+        var data = scope[attrVal];
+        if(angular.isArray(data)){
+          var ul = angular.element('<ul class="list-group">');
+          el.append(ul);
+          for(var i=0; i<data.length; i++){
+            ul.append(
+              angular.element('<li class="list-group-item">')
+              .html('Name: <strong>'+data[i].name+'</strong>, Age: <strong>'+data[i].age+'</strong>')
+            );
+          }
+        }
+      }
+    })
+    .controller("appCtrl", function($scope){
+      $scope.people = people;
+    })
+  </script>
+</head>
+
+<body ng-controller="appCtrl">
+  <div people-list="people"></div>
+</body>
+
+</html>

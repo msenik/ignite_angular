@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+
+<head>
+  <title>Lesson 17. Classwork 2</title>
+  <meta charset="utf-8">
+  <link href="../../libraries/bootstrap.css" rel="stylesheet" />
+  <link href="../../libraries/bootstrap-theme.css" rel="stylesheet" />
+  <script src="../../libraries/angular.js"></script>
+  <style>
+    body {
+      padding: 20px 20px;
+    }
+  </style>
+  <script>
+    /*
+      Создайте директиву, которая создает форму и добавляет ее на страницу.
+      В форме должны быть следующие поля: Username, login, password, email.
+    */
+
+    var app = angular.module("myApp", [])
+    .directive("form",function(){
+      return {
+        templateUrl: 'formTemplete.html'
+      }
+    })
+    .controller("appCtrl", function($scope){
+
+    })
+  </script>
+</head>
+
+<body ng-controller="appCtrl">
+  <div class="container">
+    <div form></div>
+  </div>
+</body>
+
+</html>

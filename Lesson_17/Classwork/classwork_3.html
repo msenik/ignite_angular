@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+
+<head>
+  <title>Lesson 17. Classwork 3</title>
+  <meta charset="utf-8">
+  <link href="../../libraries/bootstrap.css" rel="stylesheet" />
+  <link href="../../libraries/bootstrap-theme.css" rel="stylesheet" />
+  <script src="../../libraries/angular.js"></script>
+  <style>
+  body{
+    padding: 20px 0;
+  }
+  form .ng-valid.ng-dirty {
+    background-color: lightgreen;
+  }
+  form .ng-invalid.ng-dirty {
+    background-color: lightcoral;
+  }
+  .error {
+    color: red;
+    font-weight: bold;
+  }
+  </style>
+  <script>
+    /*
+      Для формы из предыдущей задачи добавьте валидацию на AngularJS.
+      Используйте регулярные выражения.
+    */
+
+    var app = angular.module("myApp", [])
+    .directive("registrationForm",function(){
+      return {
+        link: function(scope,el,attr){
+
+        },
+        templateUrl: 'formTemplete.html',
+        controller: function ($scope) {
+
+          $scope.showError = function (elem) {
+              var name = elem.$name;
+              var err = elem.$error;
+              if (angular.isDefined(err)) {
+                  if (err.required) {
+                      return "The field is required."
+                  }
+                  else if (err.pattern && name == 'userLogin') {
+                      return 'Only lowercase letters and digits.';
+                  }
+                  else if (err.pattern && name == "userPassword") {
+                      return "Only word character and digits between 3 and 16 times";
+                  }
+                  else if (err.email) {
+                      return "Email is invalid.";
+                  }
+              }
+          }
+          $scope.submitHandler = function(){
+            alert('Your Data Has Been Successfully Saved.');
+          }
+
+        }
+      }
+    });
+
+  </script>
+</head>
+
+<body>
+  <div class="container">
+    <div registration-form></div>
+  </div>
+</body>
+
+</html>
