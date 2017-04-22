@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+
+<head>
+  <title>Lesson 18. Homework 1</title>
+  <meta charset="utf-8">
+  <link href="../../libraries/bootstrap.css" rel="stylesheet" />
+  <link href="../../libraries/bootstrap-theme.css" rel="stylesheet" />
+  <script src="../../libraries/angular.js"></script>
+
+  <script type="text/ng-templete" id="menuTpl">
+    <ul class="nav nav-pills">
+      <li ng-repeat="item in items" ng-click="showPrice(item)" role="presentation"><a href="#">{{item.name}}</a></li>
+    </ul>
+  </script>
+
+  <style>
+    body {
+      padding: 20px 20px;
+    }
+    .bg-info{
+      height: 3em;
+      line-height: 3em;
+      margin: 20px 0;
+      padding-left: 10px;
+    }
+  </style>
+  <script>
+    /*
+    Есть массив items:
+    Создайте две директивы. Первая создает панель меню с элементами,
+    взятыми из свойства name массива items.
+    Вторая директива при клике по элементу на панели меню,
+    показывает пользователю соответсствующий контент,
+    взятый из свойства price массива items. Директивы используют общий контроллер.
+    */
+
+    var items = [
+      { name: "Table", price: 44.10 },
+      { name: "Chair", price: 21.20 },
+      { name: "Pillow", price: 12.20 },
+      { name: "Picture", price: 112.70 },
+      { name: "Lamp", price: 28.31 }
+    ];
+
+
+    var app = angular.module("myApp", [])
+    .directive("menu",function(){
+      return {
+        restrict: 'A',
+        template: function(){
+          return angular.element(document.getElementById('menuTpl')).html();
+        },
+        controller: function ($scope) {
+          $scope.items = items;
+          $scope.showPrice = function(item){
+            $scope.price = item.price;
+          }
+        },
+      }
+    })
+    .directive("info",function($log){
+      return {
+        restrict: "E",
+        require: 'menu',
+        template: "<p class='bg-info'>{{price | currency}}</p>"
+      }
+    });
+  </script>
+</head>
+
+<body>
+  <div menu></div>
+  <info></info>
+</body>
+
+</html>

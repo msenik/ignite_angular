@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+
+<head>
+  <title>Lesson 18. Homework 2</title>
+  <meta charset="utf-8">
+  <link href="../../libraries/bootstrap.css" rel="stylesheet" />
+  <link href="../../libraries/bootstrap-theme.css" rel="stylesheet" />
+  <script src="../../libraries/angular.js"></script>
+  <style>
+  body{
+    padding: 20px 0;
+  }
+  .red {
+    color: red;
+  }
+  </style>
+  <script>
+    /*
+    Создайте две директивы.
+    Первая создает список ul с произвольным количеством элементов.
+    Вторая директива добавляет четным элементам списка CSS класс ‘red’ со следующим значением:
+    Обе директивы используются в качестве атрибутов и применяются к одному и тому же элементу.
+    При решении задачи используйте приоритет директив.
+    */
+
+    var app = angular.module("myApp", [])
+    .directive("list",function(){
+      return {
+        restrict: 'A',
+        priority: 1,
+        link: function (scope, elem, attrs) {
+          var ul = angular.element('<ul class="list-group">');
+          elem.append(ul);
+          for(var i=0; i<10; i++){
+            var li = angular.element('<li class="list-group-item">').text('Item '+i);
+            ul.append(li);
+          }
+        }
+      }
+    })
+    .directive("colorize",function(){
+      return {
+        restrict: 'A',
+        priority: 2,
+        link: function (scope, elem, attrs) {
+          angular.element(elem[0].querySelectorAll('li:nth-child(2n)')).addClass('red');
+        }
+      }
+    });
+
+  </script>
+</head>
+
+<body>
+  <div class="container">
+    <div list colorize></div>
+  </div>
+</body>
+
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+
+<head>
+  <title>Lesson 18. Classwork 2</title>
+  <meta charset="utf-8">
+  <script src="../../libraries/angular.js"></script>
+  <style>
+    body {
+      padding: 20px 20px;
+    }
+  </style>
+  <script>
+    /*
+Добавьте в код предыдущей задачи еще одну директиву, которая будет выводить значение переменной счетчика в консоль.
+Организуйте код так, чтобы обе директивы использовали один и тот же контроллер. Используйте свойство require.
+    */
+
+    var app = angular.module("myApp", [])
+    .directive("counter",function(){
+      return {
+        template: "<button ng-click='startCounter()'>Start counter</button><div style='margin-top:20px;'>{{currentVal}}</div>",
+        controller: function ($scope, $interval) {
+          $scope.currentVal = 0;
+          $scope.interval = null;
+          $scope.startCounter = function(){
+            if($scope.interval){
+              return;
+            }
+            $scope.interval = $interval(function(){
+              $scope.currentVal+=1;
+            },1000);
+          }
+        },
+      }
+    })
+    .directive("counterLog",function($log){
+      return {
+        restrict: "A",
+        require: 'counter',
+        link: function (scope) {
+          scope.$watch("currentVal", function (newVal) {
+            $log.log(newVal);
+          });
+        }
+      }
+    });
+  </script>
+</head>
+
+<body>
+  <div counter counter-log></div>
+</body>
+
+</html>

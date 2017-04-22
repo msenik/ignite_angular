@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+
+<head>
+  <title>Lesson 18. Classwork 3</title>
+  <meta charset="utf-8">
+  <script src="../../libraries/angular.js"></script>
+  <style>
+    body {
+      padding: 20px 20px;
+    }
+  </style>
+  <script>
+    /*
+    Имеется html-разметка:
+    <div custom-directive>’myButton’</div>
+    Создайте директиву, результатом работы которой станет кнопка с текстом 'myButton'.
+    Используйте свойство transclude.
+    */
+
+    var app = angular.module("myApp", [])
+    .directive("customDirective",function(){
+      return {
+        transclude: true,
+        template: "<button><ng-transclude></ng-transclude></button>"
+      }
+    });
+  </script>
+</head>
+
+<body>
+  <div custom-directive>’myButton’</div>
+</body>
+
+</html>
