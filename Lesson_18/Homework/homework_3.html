@@ -15,9 +15,15 @@
     .directive("dialogBox",function($interpolate){
       return {
         replace: true,
-        template: function(el, attr){
-          confirm(el.text());
-          return '<div></div>';
+        transclude: true,
+        template: '<button ng-click="showContent()">Show source content</button>',
+        link: function(scope,elem,attrs,ctrl,transclude){
+          scope.showContent = function(){
+            confirm(scope.sourceContent);
+          };
+          transclude(scope,function(clone,scope){
+            scope.sourceContent = clone.text();
+          });
         }
       }
     });
@@ -26,7 +32,7 @@
 </head>
 
 <body>
-  <div dialog-box>This is dialog-box content</div>
+  <div dialog-box>This is dialog-box source content</div>
 </body>
 
 </html>
