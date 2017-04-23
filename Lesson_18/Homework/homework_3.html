@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+
+<head>
+  <title>Lesson 18. Homework 3</title>
+  <meta charset="utf-8">
+  <script src="../../libraries/angular.js"></script>
+  <script>
+    /*
+    Создайте директиву dialogBox, которая будет выводить на экран
+    в диалоговом окне содержимое элемента, к которому привязана директива.
+    */
+
+    var app = angular.module("myApp", [])
+    .directive("dialogBox",function($interpolate){
+      return {
+        replace: true,
+        template: function(el, attr){
+          confirm(el.text());
+          return '<div></div>';
+        }
+      }
+    });
+
+  </script>
+</head>
+
+<body>
+  <div dialog-box>This is dialog-box content</div>
+</body>
+
+</html>
